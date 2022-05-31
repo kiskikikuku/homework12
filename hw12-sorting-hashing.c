@@ -262,12 +262,12 @@ int shellSort(int *a)
 			{
 				v = a[j];										// 시작 항 저장
 				k = j;											// 시작 인덱스 저장
-				while (k > h-1 && a[k-h] > v)					
+				while (k > h-1 && a[k-h] > v)					// h만큼 앞의 항과 비교
 				{
-					a[k] = a[k-h];
+					a[k] = a[k-h];								
 					k -= h;
 				}
-				a[k] = v;
+				a[k] = v;										// 오름차순으로 정렬 (값 변경)
 			}
 		}
 	}
