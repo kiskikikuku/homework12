@@ -139,7 +139,7 @@ int initialize(int** a)
 int freeArray(int *a)
 {
 	if(a != NULL)
-		free(a);
+		free(a);	// 배열에 할당된 공간을 해제합니다.
 	return 0;
 }
 
@@ -150,10 +150,10 @@ void printArray(int *a)
 		return;
 	}
 	for(int i = 0; i < MAX_ARRAY_SIZE; i++)
-		printf("a[%02d] ", i);
+		printf("a[%02d] ", i);			// 배열 index 출력
 	printf("\n");
 	for(int i = 0; i < MAX_ARRAY_SIZE; i++)
-		printf("%5d ", a[i]);
+		printf("%5d ", a[i]);			// 배열 값 출력
 	printf("\n");
 }
 
@@ -282,29 +282,29 @@ int quickSort(int *a, int n)
 	int v, t;
 	int i, j;
 
-	if (n > 1)
+	if (n > 1) 			// 배열 크기 > 1
 	{
-		v = a[n-1];
+		v = a[n-1];		// 마지막 항 값 -> pivot
 		i = -1;
-		j = n - 1;
+		j = n - 1;		// pivot index
 
 		while(1)
 		{
-			while(a[++i] < v);
-			while(a[--j] > v);
-
-			if (i >= j) break;
+			while(a[++i] < v);		// a[0] (left)부터 올라가며, a[n-1]보다 큰 값 찾기
+			while(a[--j] > v);		// a[n-1] (right)부터 내려가며, a[n-1] 보다 작은 값 찾기
+									
+			if (i >= j) break;		// 교차되면 교환x
 			t = a[i];
 			a[i] = a[j];
-			a[j] = t;
+			a[j] = t;				// a[i], a[j]의 값 교환
 		}
 
-		t = a[i];
+		t = a[i];					// pivot값을 i위치의 값과 교환한다 (pivot을 i로 이동 -> 정렬 완료)
 		a[i] = a[n-1];
 		a[n-1] = t;
-
-		quickSort(a, i);
-		quickSort(a+i+1, n-i-1);
+									// 바뀐 pivot을 중심으로, 
+		quickSort(a, i);			// 왼쪽 레코드에 대한 퀵 정렬
+		quickSort(a+i+1, n-i-1);	// 오른쪽 레코드에 대한 퀵 정렬
 	}
 
 
@@ -312,7 +312,7 @@ int quickSort(int *a, int n)
 }
 
 int hashCode(int key) {
-   return key % MAX_HASH_TABLE_SIZE;
+   return key % MAX_HASH_TABLE_SIZE;		// 해쉬함수, MOD 연산 이용
 }
 
 int hashing(int *a, int **ht)
@@ -328,7 +328,7 @@ int hashing(int *a, int **ht)
 	}
 
 	for(int i = 0; i < MAX_HASH_TABLE_SIZE; i++)
-		hashtable[i] = -1;
+		hashtable[i] = -1;							// hash tabel 값 -1로 초기화
 
 	/*
 	for(int i = 0; i < MAX_HASH_TABLE_SIZE; i++)
@@ -337,29 +337,29 @@ int hashing(int *a, int **ht)
 
 	int key = -1;
 	int hashcode = -1;
-	int index = -1;
-	for (int i = 0; i < MAX_ARRAY_SIZE; i++)
+	int index = -1;							// 해싱에 사용할 값 초기화
+	for (int i = 0; i < MAX_ARRAY_SIZE; i++)	// 배열 a에 대한 hash table 생성
 	{
-		key = a[i];
-		hashcode = hashCode(key);
+		key = a[i];							// key에 a[i] 대입
+		hashcode = hashCode(key); 			// key에 대한 해싱
 		/*
 		printf("key = %d, hashcode = %d, hashtable[%d]=%d\n", key, hashcode, hashcode, hashtable[hashcode]);
 		*/
-		if (hashtable[hashcode] == -1)
+		if (hashtable[hashcode] == -1) 	 	// 비어있는 bucket
 		{
-			hashtable[hashcode] = key;
-		} else 	{
+			hashtable[hashcode] = key;		// 대입
+		} else 	{							// collision
 
-			index = hashcode;
+			index = hashcode;				
 
-			while(hashtable[index] != -1)
+			while(hashtable[index] != -1)	// 충돌 없을 때 까지
 			{
-				index = (++index) % MAX_HASH_TABLE_SIZE;
+				index = (++index) % MAX_HASH_TABLE_SIZE;	// hash table의 다음 bucket으로
 				/*
 				printf("index = %d\n", index);
 				*/
 			}
-			hashtable[index] = key;
+			hashtable[index] = key;							// table에 key 값 대입
 		}
 	}
 
@@ -368,16 +368,16 @@ int hashing(int *a, int **ht)
 
 int search(int *ht, int key)
 {
-	int index = hashCode(key);
+	int index = hashCode(key);					// 찾으려는 key값을 hash함수에 넣으면 index(버킷 주소)가 반환됨.
 
 	if(ht[index] == key)
-		return index;
+		return index;							// 찾는 key가 맞다면 주소 반환
 
-	while(ht[++index] != key)
+	while(ht[++index] != key)					
 	{
-		index = index % MAX_HASH_TABLE_SIZE;
+		index = index % MAX_HASH_TABLE_SIZE;	// 버킷 내에서 key 찾을때까지 slot 탐색
 	}
-	return index;
+	return index;								// 주소 반환
 }
 
 
